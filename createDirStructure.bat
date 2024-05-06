@@ -1,9 +1,11 @@
 @echo off
 setlocal EnableDelayedExpansion
 
+:: directory structure for game development
 :: Define directories on separate lines for clarity
+
 set "dir1=Assets"
-set "dir2=Assets\Definitions"
+set "dir2=Assets\Definitions\ThisGame"
 set "dir3=Assets\Fonts"
 set "dir4=Assets\Graphics"
 set "dir5=Assets\Models"
@@ -15,6 +17,7 @@ set "dir9=Assets\Graphics\SheetSequences"
 set "dir10=Assets\Graphics\Sprites"
 set "dir11=Assets\Graphics\Textures"
 set "dir42=Assets\Graphics\Packs"
+set "dir43=Assets\Graphics\RotatedSheetSequences"
 
 set "dir12=Assets\Graphics\Sprites\ActionMovables"
 set "dir13=Assets\Graphics\Sprites\Doors"
@@ -30,6 +33,7 @@ set "dir22=Assets\Graphics\Sprites\Skills"
 set "dir23=Assets\Graphics\Sprites\Status"
 set "dir24=Assets\Graphics\Sprites\Triggers"
 set "dir25=Assets\Graphics\Sprites\UI"
+set "dir44=Assets\Graphics\Sprites\Rotated"
 
 set "dir26=Assets\Graphics\Textures\Gates"
 set "dir27=Assets\Graphics\Textures\ObjectTextures"
@@ -49,10 +53,10 @@ set "dir41=Code\JS\Library\Misc"
 
 set "dir37=CSS"
 set "dir38=External"
-set "dir39=Games"
+set "dir39=Games\ThisGame"
 set "dir40=Images"
 
-:: Add more directories as needed, follow the pattern above, last id = 42
+:: Add more directories as needed, follow the pattern above, next id = 45
 
 :: Initialize directory count
 set "count=0"

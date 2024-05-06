@@ -9,7 +9,7 @@
 
  */
 ////////////////////////////////////////////////////
-var MapDict = {
+const MapDict = {
   void: 0,
   border: 1,
   path: 2,
@@ -17,7 +17,7 @@ var MapDict = {
   blue: 8,
   brown: 16
 };
-var INI = {
+const INI = {
   GRID_SIZE: 3,
   SIZE: (243 + 1) * 3,
   OFF_X: 9,
@@ -40,8 +40,8 @@ var INI = {
   MIN_TURN: 10,
   MAX_TURN: 60
 };
-var PRG = {
-  VERSION: "1.00",
+const PRG = {
+  VERSION: "1.00.01",
   CSS: "color: #0F0",
   NAME: "QWYX",
   YEAR: 2020,
@@ -287,7 +287,7 @@ class Sparx {
     this.lastDir = dir;
   }
 }
-var ENEMY = {
+const ENEMY = {
   manage: function () {
     QWYX.collision();
     ENEMY.move();
@@ -315,7 +315,7 @@ var ENEMY = {
     }
   }
 };
-var FUSE = {
+const FUSE = {
   construct() {
     FUSE.MoveState = new MoveState(new Grid(0, 0));
     FUSE.actor = new ACTOR("Fuse", 0, 0, "linear", ASSET.Fuse);
@@ -369,7 +369,7 @@ var FUSE = {
     );
   }
 };
-var LevelTable = {
+const LevelTable = {
   N_Qwyx(level) {
     if (level < 4) {
       return 1;
@@ -655,7 +655,7 @@ class Qwyx {
     CTX.stroke();
   }
 }
-var QWYX = {
+const QWYX = {
   numberOfLines: null,
   POOL: [],
   startPositions: [],
@@ -710,7 +710,7 @@ var QWYX = {
     }
   }
 };
-var HERO = {
+const HERO = {
   construct: function () {
     HERO.startLocation = new Grid(Math.floor(INI.GRIDS / 2) + 1, INI.GRIDS - 1);
     HERO.MoveState = new MoveState(HERO.startLocation);
@@ -952,7 +952,7 @@ var HERO = {
   }
 };
 var MAP = null;
-var GAME = {
+const GAME = {
   CSS: "color: orange",
   titleScreen: function () {
     GAME.prepareForRestart();
@@ -1272,7 +1272,7 @@ var GAME = {
     );
   }
 };
-var TITLE = {
+const TITLE = {
   main: function () {
     TITLE.title();
     TITLE.bottom();
