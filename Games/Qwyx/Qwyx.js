@@ -41,11 +41,11 @@ const INI = {
   MAX_TURN: 60
 };
 const PRG = {
-  VERSION: "1.00.01",
+  VERSION: "1.00.02",
   CSS: "color: #0F0",
   NAME: "QWYX",
   YEAR: 2020,
-  INIT: function () {
+  INIT() {
     console.log("%c****************************", PRG.CSS);
     console.log(
       `%c${PRG.NAME} ${PRG.VERSION} by Lovro Selic, (c) C00lSch00l ${PRG.YEAR} on ˘${navigator.userAgent}`,
@@ -66,15 +66,22 @@ const PRG = {
     ENGINE.setGridSize(INI.GRID_SIZE);
     ENGINE.setSpriteSheetSize(INI.SPRITE_SIZE);
   },
-  setup: function () {
+  setup() {
+    $("#engine_version").html(ENGINE.VERSION);
+    $("#grid_version").html(GRID.VERSION);
+    $("#lib_version").html(LIB.VERSION);
+
     $("#toggleHelp").click(function () {
       $("#help").toggle(400);
     });
     $("#toggleAbout").click(function () {
       $("#about").toggle(400);
     });
+    $("#toggleVersion").click(function () {
+      $("#debug").toggle(400);
+    });
   },
-  start: function () {
+  start() {
     console.log(`%c${PRG.NAME} started.`, PRG.CSS);
     $(ENGINE.topCanvas).off("mousemove", ENGINE.mouseOver);
     $(ENGINE.topCanvas).off("click", ENGINE.mouseClick);
@@ -100,14 +107,14 @@ const PRG = {
 
     ENGINE.checkProximity = false;
     ENGINE.checkIntersection = false;
-    ENGINE.setCollisionsafe(INI.SPRITE_SIZE);
+    //ENGINE.setCollisionsafe(INI.SPRITE_SIZE);
 
     $("#bottom").css(
       "margin-top",
       ENGINE.gameHEIGHT +
-        ENGINE.titleHEIGHT +
-        ENGINE.bottomHEIGHT +
-        ENGINE.scoreHEIGHT
+      ENGINE.titleHEIGHT +
+      ENGINE.bottomHEIGHT +
+      ENGINE.scoreHEIGHT
     );
 
     $(ENGINE.gameWindowId).width(ENGINE.gameWIDTH + 4);
@@ -130,20 +137,9 @@ const PRG = {
       "ROOM",
       ENGINE.gameWIDTH,
       ENGINE.gameHEIGHT,
-      [
-        "background",
-        "line",
-        "qwyx",
-        "animation",
-        "actors",
-        "explosion",
-        "text",
-        "button",
-        "click"
-      ],
+      ["background", "line", "qwyx", "animation", "actors", "explosion", "text", "button", "click"],
       null
     );
-
     ENGINE.addBOX(
       "DOWN",
       ENGINE.bottomWIDTH,
@@ -206,7 +202,7 @@ class Sparx {
   }
   move() {
     if (this.live) {
-      let hit = ENGINE.collision(this.actor, HERO.actor);
+      let hit = ENGINE.collisionRectangles(this.actor, HERO.actor);
       if (hit) {
         let dist = this.MoveState.homeGrid.distanceDiagonal(
           HERO.MoveState.homeGrid
@@ -272,7 +268,7 @@ class Sparx {
               MapDict.border,
               this.lastDir
             );
-            if (path.stack.length === 0){
+            if (path.stack.length === 0) {
               console.error("path stack of length 0!");
               return;
             }
@@ -723,7 +719,7 @@ const HERO = {
   firstInit: function () {
     HERO.construct();
   },
-  init: function () {},
+  init: function () { },
   draw: function () {
     ENGINE.layersToClear.add("actors");
     ENGINE.spriteDraw(
@@ -824,8 +820,8 @@ const HERO = {
       if (HERO.speed === INI.SLOW) factor = 2;
       GAME.score +=
         Math.floor(scoreAddition * INI.LEVEL_SCORE) * factor * GAME.bonusFactor;
-      
-      if (GAME.score >= GAME.extraLife[0]){
+
+      if (GAME.score >= GAME.extraLife[0]) {
         console.log("EXTRA LIFE");
         GAME.lives++;
         AUDIO.ExtraLife.play();
@@ -1090,12 +1086,9 @@ const GAME = {
     const RD = new RenderData("NGage", 20, "#00EE00", "text", "#444", 1, 1, 2);
     let y = ENGINE.gameHEIGHT / 2;
     ENGINE.TEXT.RD = RD;
-    ENGINE.TEXT.centeredText(`LEVEL ${GAME.level} COMPLETED`, y - 32);
+    ENGINE.TEXT.centeredText(`LEVEL ${GAME.level} COMPLETED`, ENGINE.gameWIDTH, y - 32);
     let bonus = GAME.bonus * GAME.bonusFactor * 1000;
-    ENGINE.TEXT.centeredText(
-      `BONUS: ${GAME.bonus}% * 1000 * ${GAME.bonusFactor} = ${bonus}`,
-      y
-    );
+    ENGINE.TEXT.centeredText(`BONUS: ${GAME.bonus}% * 1000 * ${GAME.bonusFactor} = ${bonus}`, ENGINE.gameWIDTH, y);
     GAME.score += bonus;
     TITLE.score();
     if (split) {
@@ -1227,11 +1220,9 @@ const GAME = {
     }
   },
   generateTitleText: function () {
-    let text = `${PRG.NAME} ${
-      PRG.VERSION
-    }, a game by Lovro Selic, ${"\u00A9"} C00lSch00l ${
-      PRG.YEAR
-    } . Music: 'Shadows In The Fog' written and performed by LaughingSkull, ${"\u00A9"} 2012 Lovro Selic. `;
+    let text = `${PRG.NAME} ${PRG.VERSION
+      }, a game by Lovro Selic, ${"\u00A9"} C00lSch00l ${PRG.YEAR
+      } . Music: 'Shadows In The Fog' written and performed by LaughingSkull, ${"\u00A9"} 2012 Lovro Selic. `;
     text +=
       "     ENGINE, GRID and GAME code by Lovro Selic using JavaScript ES10";
     text = text.split("").join(String.fromCharCode(8202));
@@ -1240,12 +1231,7 @@ const GAME = {
   setTitle: function () {
     const text = GAME.generateTitleText();
     const RD = new RenderData("Arcade", 16, "blue", "bottomText");
-    const SQ = new Square(
-      0,
-      0,
-      LAYER.bottomText.canvas.width,
-      LAYER.bottomText.canvas.height
-    );
+    const SQ = new Area(0, 0, LAYER.bottomText.canvas.width, LAYER.bottomText.canvas.height); //
     GAME.movingText = new MovingText(text, 3, RD, SQ);
   },
   runTitle: function () {
@@ -1309,7 +1295,7 @@ const TITLE = {
     CTX.shadowOffsetY = 2;
     CTX.shadowBlur = 3;
     CTX.fillText(PRG.NAME, x, y);
-    
+
     y = 16;
     CTX.strokeStyle = "#000";
     CTX.lineWidth = 1;
@@ -1324,45 +1310,17 @@ const TITLE = {
     }
   },
   level: function () {
-    const RD = new RenderData(
-      "NGage",
-      18,
-      "#C0C0C0",
-      "text",
-      "#A9A9A9",
-      1,
-      1,
-      3
-    );
+    const RD = new RenderData("NGage", 18, "#C0C0C0", "text", "#A9A9A9", 1, 1, 3);
     ENGINE.TEXT.RD = RD;
     let y = ENGINE.gameHEIGHT / 4 + 24;
-    ENGINE.TEXT.centeredText(
-      `LEVEL: ${GAME.level.toString().padStart(2, "0")}`,
-      y
-    );
+    ENGINE.TEXT.centeredText(`LEVEL: ${GAME.level.toString().padStart(2, "0")}`, ENGINE.gameWIDTH, y);
     y += 24;
-    ENGINE.TEXT.centeredText(
-      `BONUS MULTIPLIER: ${GAME.bonusFactor.toString()}`,
-      y
-    );
+    ENGINE.TEXT.centeredText(`BONUS MULTIPLIER: ${GAME.bonusFactor.toString()}`, ENGINE.gameWIDTH, y);
   },
   background: function () {
     var CTX = LAYER.title;
     CTX.fillStyle = "#000";
-    CTX.roundRect(
-      0,
-      0,
-      ENGINE.titleWIDTH,
-      ENGINE.titleHEIGHT,
-      {
-        upperLeft: 20,
-        upperRight: 20,
-        lowerLeft: 0,
-        lowerRight: 0
-      },
-      true,
-      true
-    );
+    CTX.roundRect(0, 0, ENGINE.titleWIDTH, ENGINE.titleHEIGHT, { upperLeft: 20, upperRight: 20, lowerLeft: 0, lowerRight: 0 }, true, true);
   },
   bottom: function () {
     var CTX = LAYER.bottom;
@@ -1560,32 +1518,23 @@ const TITLE = {
     ENGINE.fillLayer("background", "#000");
     TITLE.bottomBlank();
 
-    const RD = new RenderData(
-      "NGage",
-      30,
-      "silver",
-      "text",
-      "darkgray",
-      2,
-      2,
-      2
-    );
+    const RD = new RenderData("NGage", 30, "silver", "text", "darkgray", 2, 2, 2);
+
     ENGINE.TEXT.RD = RD;
     let x, y;
     y = 180;
-    ENGINE.TEXT.centeredText("BY", y);
+    ENGINE.TEXT.centeredText("BY", ENGINE.gameWIDTH, y);
     y = 220;
-    ENGINE.TEXT.centeredText("LOVRO SELIC", y);
+    ENGINE.TEXT.centeredText("LOVRO SELIC", ENGINE.gameWIDTH, y);
     $("#DOWN")[0].scrollIntoView();
-    let cname = ENGINE.getCanvasName("ROOM");
-    ENGINE.topCanvas = cname;
+    ENGINE.topCanvas = ENGINE.getCanvasName("ROOM");
     TITLE.drawButtons();
 
     CTX = LAYER.text;
     const TD = new RenderData("NGage", 80, "blue", "text", "azure", 4, 2, 5);
     ENGINE.TEXT.RD = TD;
     y = 80;
-    ENGINE.TEXT.centeredText(PRG.NAME, y);
+    ENGINE.TEXT.centeredText(PRG.NAME, ENGINE.gameWIDTH, y);
 
     y = 26;
     CTX.strokeStyle = "#000";

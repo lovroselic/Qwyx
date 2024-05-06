@@ -33,16 +33,6 @@
                 </div>
             </div>
 
-
-            <!--
-            <h1 id="title" style='font-family: "Arcade"'></h1>
-            <p>Capture at least 75% of the territory from the Qwyx, while avoiding Sparx and the Fuse. Remake of the
-                legendary game from 1981.</p>
-            <p id="buttons">
-                <input type='button' id='toggleHelp' value='Show/Hide Instructions'>
-                <input type='button' id='toggleAbout' value='About'>
-            </p>
-            -->
             <div class="row my-5">
                 <div id="debug" class="section">
                     <fieldset>
@@ -51,10 +41,7 @@
                         </legend>
                         ENGINE: <span id="engine_version"></span><br>
                         GRID: <span id="grid_version"></span><br>
-                        TERRAIN: <span id="terrain_version"></span><br>
                         Prototype LIB: <span id="lib_version"></span><br>
-                        IndexArray Managers: <span id="iam_version"></span><br>
-                        Speech: <span id="speech_version"></span><br>
                     </fieldset>
 
                 </div>
@@ -72,9 +59,9 @@
                     <legend>
                         Instructions:
                     </legend>
-                    <p>Cursor key to move.</p>
-                    <p>SHIFT - slow draw - double score</p>
-                    <p>CTRL - fast draw</p>
+                    <p><kbd>Cursor</kbd> key to move.</p>
+                    <p><kbd>SHIFT</kbd> - slow draw - double score</p>
+                    <p><kbd>CTRL</kbd> - fast draw</p>
                     <p>Split the two Qwyxes to increase bonus multiplier.</p>
                 </fieldset>
             </div>
@@ -85,21 +72,34 @@
                     <legend>
                         About:
                     </legend>
-                    <image src="https://upload.wikimedia.org/wikipedia/en/thumb/8/8d/Qixingame.png/220px-Qixingame.png"
-                        alt="Qix" class="border border-dark p-1 m-2 float-start" title="Qix">
-                        <p> QWYX is a clone of <a href="https://en.wikipedia.org/wiki/Qix" target="_blank">Qix</a>,
-                            released in 1981; developed by Randy and Sandy Pfeiffer.</p>
-                        <p>This clone tries to remains faithful to the original with some slight modifications.</p>
-                        <p>Algorithm for finding the point on which Flood fill is to be performed, described in <a
-                                href="https://gamedev.stackexchange.com/a/184932/109513"
-                                target="_blank">gamedev.stackexchange</a>.</p>
+                    <div class="container">
+                        <div class='row '>
+                            <div class="col-12 col-lg-3 my-2 d-flex align-items-center justify-content-center">
+                                <image
+                                    src="https://upload.wikimedia.org/wikipedia/en/thumb/8/8d/Qixingame.png/220px-Qixingame.png"
+                                    alt="Qix" class="img-fluid  border-dark rounded-2" title="Qix"></image>
+                            </div>
+                            <div class="col-12 col-lg-9 my-2">
+                                <p>QWYX is a clone of <a href="https://en.wikipedia.org/wiki/Qix"
+                                        target="_blank">Qix</a>, originally released in 1981 by developers Randy and
+                                    Sandy Pfeiffer. Although its appearance might seem rudimentary - reminiscent of a
+                                    glorified screensaver - it was considered one of the most innovative games in the
+                                    early 1980s.</p>
+                                <p>This clone aims to stay true to the original, with only minor modifications.</p>
+                                <p>My own algorithm for identifying the starting point for the Flood Fill operation is
+                                    detailed on <a href="https://gamedev.stackexchange.com/a/184932/109513"
+                                        target="_blank">GameDev Stack Exchange</a>. It is notably swift and efficient.
+                                </p>
+                            </div>
 
+                        </div>
+                    </div>
                 </fieldset>
             </div>
 
             <p class="version cb" id="version"></p>
         </div>
-        <!-- END CONTENT  -->
+
     </div>
 
     <div class="container">
@@ -108,15 +108,18 @@
         <div id="temp" class="hidden"></div>
         <div id="temp2" class="hidden"></div>
     </div>
+    <!-- COPY END -->
 
     <!-- External JS -->
     <script src="/External/bootstrap.bundle.min.js"></script>
     <script src="/External/jquery-3.6.0.min.js"></script>
+
     <!-- JS -->
-    <script src="/Code/JS/Library/Engine/prototypeLIB_2_13.js" type="text/javascript"></script>
-    <script src="/Code/JS/Library/Misc/score_1_05.js" type="text/javascript"></script>
-    <script src="/Code/JS/Library/Engine/engine_2_51.js" type="text/javascript"></script>
+    <script src="/Code/JS/Library/Engine/Prototype_4_01.js" type="text/javascript"></script>
+    <script src="/Code/JS/Library/Engine/ENGINE_4_08.js" type="text/javascript"></script>
+    <script src="/Code/JS/Library/Engine/OldEngineWedge_1.00.js" type="text/javascript"></script>
     <script src="/Code/JS/Library/Engine/grid_2_00.js" type="text/javascript"></script>
+    <script src="/Code/JS/Library/Misc/score_1_05.js" type="text/javascript"></script>
     <script src="/Assets/Definitions/Qwyx/assets_Qwyx.js" type="text/javascript"></script>
     <script src="/Games/Qwyx/Qwyx.js" type="text/javascript"></script>
 </body>
