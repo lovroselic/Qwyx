@@ -41,19 +41,19 @@ const INI = {
   MAX_TURN: 60
 };
 const PRG = {
-  VERSION: "1.00.02",
+  VERSION: "1.01",
   CSS: "color: #0F0",
   NAME: "QWYX",
   YEAR: 2020,
   INIT() {
     console.log("%c****************************", PRG.CSS);
     console.log(
-      `%c${PRG.NAME} ${PRG.VERSION} by Lovro Selic, (c) C00lSch00l ${PRG.YEAR} on ˘${navigator.userAgent}`,
+      `%c${PRG.NAME} ${PRG.VERSION} by Lovro Selic, (c) LaughingSkull ${PRG.YEAR} on ˘${navigator.userAgent}`,
       PRG.CSS
     );
     $("#title").html(PRG.NAME);
     $("#version").html(
-      `${PRG.NAME} V${PRG.VERSION} <span style='font-size:14px'>&copy</span> C00lSch00l ${PRG.YEAR}`
+      `${PRG.NAME} V${PRG.VERSION} <span style='font-size:14px'>&copy</span> LaughingSkull ${PRG.YEAR}`
     );
     $("input#toggleAbout").val("About " + PRG.NAME);
     $("#about fieldset legend").append(" " + PRG.NAME + " ");
@@ -107,7 +107,7 @@ const PRG = {
 
     ENGINE.checkProximity = false;
     ENGINE.checkIntersection = false;
-    //ENGINE.setCollisionsafe(INI.SPRITE_SIZE);
+
 
     $("#bottom").css(
       "margin-top",
@@ -284,17 +284,17 @@ class Sparx {
   }
 }
 const ENEMY = {
-  manage: function () {
+  manage() {
     QWYX.collision();
     ENEMY.move();
   },
-  move: function () {
+  move() {
     FUSE.move();
     for (const enemy of ENEMY.POOL) {
       enemy.move();
     }
   },
-  draw: function () {
+  draw() {
     ENGINE.layersToClear.add("actors");
     FUSE.draw();
     for (const enemy of ENEMY.POOL) {
@@ -302,7 +302,7 @@ const ENEMY = {
     }
   },
   POOL: [],
-  removeSparx: function () {
+  removeSparx() {
     let EPL = ENEMY.POOL.length - 1;
     for (let i = EPL; i >= 0; i--) {
       if (ENEMY.POOL[i].type === "sparx") {
@@ -707,7 +707,7 @@ const QWYX = {
   }
 };
 const HERO = {
-  construct: function () {
+  construct() {
     HERO.startLocation = new Grid(Math.floor(INI.GRIDS / 2) + 1, INI.GRIDS - 1);
     HERO.MoveState = new MoveState(HERO.startLocation);
     HERO.actor = new ACTOR("Styx", 0, 0, "linear", ASSET.Styx);
@@ -716,11 +716,11 @@ const HERO = {
     HERO.makingLine = false;
     HERO.connected = false;
   },
-  firstInit: function () {
+  firstInit() {
     HERO.construct();
   },
-  init: function () { },
-  draw: function () {
+  init() { },
+  draw() {
     ENGINE.layersToClear.add("actors");
     ENGINE.spriteDraw(
       "actors",
@@ -730,7 +730,7 @@ const HERO = {
       GAME.PAINT.OFFSET
     );
   },
-  move: function (dir) {
+  move(dir) {
     if (HERO.dead) return;
     if (HERO.MoveState.moving) {
       GRID.translateMove(HERO, MAP, false, HeroOnFinish, false);
@@ -749,7 +749,7 @@ const HERO = {
       }
     }
   },
-  connect: function () {
+  connect() {
     if (!GRID.same(GAME.path.last(), HERO.MoveState.endGrid)) {
       GAME.path.push(HERO.MoveState.endGrid);
     }
@@ -843,7 +843,7 @@ const HERO = {
     HERO.speed = INI.FAST;
     AUDIO.Buzz.play();
   },
-  makeMove: function (dir) {
+  makeMove(dir) {
     if (HERO.dead) return;
     if (HERO.MoveState.moving) return;
     if (HERO.makingLine) {
@@ -860,7 +860,7 @@ const HERO = {
       HERO.MoveState.next(dir, INI.MOVE_GRIDS);
     }
   },
-  lightFuse: function () {
+  lightFuse() {
     FUSE.active = true;
     if (!FUSE.live) {
       FUSE.start();
@@ -869,7 +869,7 @@ const HERO = {
       }, QWYX.fuseStartTimeout);
     }
   },
-  makeLine: function (dir) {
+  makeLine(dir) {
     if (HERO.dead) return;
     if (HERO.MoveState.moving) return;
 
@@ -917,11 +917,11 @@ const HERO = {
     }
     return false;
   },
-  manage: function () {
+  manage() {
     HERO.actor.animateMove("linear");
     HERO.move();
   },
-  die: function () {
+  die() {
     ENGINE.clearLayer("actors");
     FUSE.end();
     GAME.sparxTimer = null;
@@ -950,15 +950,15 @@ const HERO = {
 var MAP = null;
 const GAME = {
   CSS: "color: orange",
-  titleScreen: function () {
+  titleScreen() {
     GAME.prepareForRestart();
     TITLE.startTitle();
   },
-  abort: function () {
+  abort() {
     ENGINE.GAME.stopAnimation = true;
     console.error("..... aborting GAME, DEBUG info:");
   },
-  start: function () {
+  start() {
     console.log(`%c****************** GAME.start ******************`, GAME.CSS);
     if (AUDIO.Title) {
       AUDIO.Title.pause();
@@ -984,7 +984,7 @@ const GAME = {
     GAME.bonusFactor = 1;
     ENGINE.GAME.ANIMATION.waitThen(GAME.levelStart, 2);
   },
-  prepareForRestart: function () {
+  prepareForRestart() {
     ENGINE.clearLayer("text");
     ENGINE.clearLayer("actors");
     ENGINE.clearLayer("background");
@@ -996,7 +996,7 @@ const GAME = {
     ENGINE.clearLayer("line");
     ENGINE.clearLayer("qwyx");
   },
-  finalFork: function () {
+  finalFork() {
     GAME.lives--;
     if (GAME.lives <= 0) {
       GAME.end();
@@ -1004,7 +1004,7 @@ const GAME = {
       GAME.levelContinue();
     }
   },
-  intro: function () {
+  intro() {
     ENEMY.manage();
     if (GAME.R <= 0) {
       ENGINE.clearLayer("text");
@@ -1013,7 +1013,7 @@ const GAME = {
     }
     GAME.introframeDraw();
   },
-  drawHeroCursor: function () {
+  drawHeroCursor() {
     let CTX = LAYER.text;
     CTX.strokeStyle = GAME.HERO_CURSOR.color();
     CTX.beginPath();
@@ -1024,12 +1024,12 @@ const GAME = {
     GAME.R -= 4;
     GAME.HERO_CURSOR = GAME.HERO_CURSOR.next();
   },
-  introframeDraw: function () {
+  introframeDraw() {
     ENGINE.clearLayerStack();
     ENEMY.draw();
     GAME.drawHeroCursor();
   },
-  outro: function () {
+  outro() {
     GAME.outroFrameDraw();
   },
   outroFrameDraw() {
@@ -1037,14 +1037,14 @@ const GAME = {
     ENEMY.draw();
     EXPLOSIONS.draw();
   },
-  levelExecute: function () {
+  levelExecute() {
     console.log("level", GAME.level, "executes");
     GAME.firstFrameDraw(GAME.level);
     ENGINE.GAME.ANIMATION.next(GAME.intro);
     GAME.R = 100;
     GAME.HERO_CURSOR = new Color(255, 0, 0);
   },
-  levelContinue: function () {
+  levelContinue() {
     console.log("LEVEL", GAME.level, "continues ...");
 
     if (GAME.path.length !== 0) {
@@ -1063,7 +1063,7 @@ const GAME = {
     GAME.sparxTimer = null;
     GAME.levelExecute();
   },
-  levelStart: function () {
+  levelStart() {
     console.log("starting level", GAME.level);
     GAME.prepareForRestart();
     GAME.area = 0;
@@ -1073,16 +1073,16 @@ const GAME = {
     GAME.initLevel(GAME.level);
     GAME.levelExecute();
   },
-  nextLevel: function () {
+  nextLevel() {
     TITLE.pressEnter();
     GAME.level++;
     ENGINE.GAME.ANIMATION.next(GAME.waitForEnter.bind(null, GAME.levelStart));
   },
-  levelSplit: function () {
+  levelSplit() {
     GAME.bonusFactor += 1;
     GAME.levelEnd(true);
   },
-  levelEnd: function (split = false) {
+  levelEnd(split = false) {
     const RD = new RenderData("NGage", 20, "#00EE00", "text", "#444", 1, 1, 2);
     let y = ENGINE.gameHEIGHT / 2;
     ENGINE.TEXT.RD = RD;
@@ -1102,7 +1102,7 @@ const GAME = {
     AUDIO.ClearLevel.play();
     ENGINE.GAME.ANIMATION.stop();
   },
-  initLevel: function (level) {
+  initLevel(level) {
     console.log("init level", level);
     GAME.bonus = 0;
     MAP = new GridArray(INI.GRIDS, INI.GRIDS);
@@ -1110,21 +1110,21 @@ const GAME = {
     MAP.border();
     GAME.PAINT.OFFSET = new Vector(INI.OFF_X, INI.OFF_Y);
   },
-  frameDraw: function () {
+  frameDraw() {
     ENGINE.clearLayerStack();
     HERO.draw();
     ENEMY.draw();
     TITLE.score();
   },
   colors: ["white", "#666", "#EEE", "blue", "brown"],
-  firstFrameDraw: function (level) {
+  firstFrameDraw(level) {
     TITLE.main();
     TITLE.level();
     const CTX = LAYER.background;
     GAME.PAINT.back(GAME.colors, CTX);
     HERO.draw();
   },
-  run: function () {
+  run() {
     if (ENGINE.GAME.stopAnimation) return;
     HERO.manage();
     ENEMY.manage();
@@ -1132,7 +1132,7 @@ const GAME = {
     ENGINE.TIMERS.update();
     GAME.frameDraw();
   },
-  respond: function () {
+  respond() {
     //GAME.respond() template
     if (HERO.dead) return;
     var map = ENGINE.GAME.keymap;
@@ -1172,12 +1172,12 @@ const GAME = {
     if (HERO.makingLine) HERO.lightFuse();
     return;
   },
-  setup: function () {
+  setup() {
     console.log("%cGAME SETUP started", PRG.CSS);
     $("#buttons").prepend("<input type='button' id='startGame' value='START'>");
     $("#startGame").on("click", GAME.start);
   },
-  end: function () {
+  end() {
     console.log("GAME ENDED");
     ENGINE.showMouse();
     GAME.checkScore();
@@ -1190,17 +1190,17 @@ const GAME = {
       ENGINE.GAME.ANIMATION.waitThen(func);
     }
   },
-  checkScore: function () {
+  checkScore() {
     console.log(PRG.NAME, "stopped?", !ENGINE.GAME.running);
     SCORE.checkScore(GAME.score);
     SCORE.hiScore();
     TITLE.hiScore();
   },
-  configureLevel: function (level) {
+  configureLevel(level) {
     console.log("Configuring level:", level);
   },
   PAINT: {
-    back: function (color, CTX, offset = GAME.PAINT.OFFSET, size = ENGINE.INI.GRIDPIX) {
+    back(color, CTX, offset = GAME.PAINT.OFFSET, size = ENGINE.INI.GRIDPIX) {
       ENGINE.resetShadow(CTX);
       ENGINE.fillLayer("background", "#000");
       for (const [index, map] of MAP.map.entries()) {
@@ -1212,41 +1212,41 @@ const GAME = {
         }
       }
     },
-    gridOnLine: function (grid, color) {
+    gridOnLine(grid, color) {
       const CTX = LAYER.line;
       const size = ENGINE.INI.GRIDPIX;
       CTX.fillStyle = color;
       CTX.pixelAt(INI.OFF_X + grid.x * size, INI.OFF_Y + grid.y * size, size);
     }
   },
-  generateTitleText: function () {
+  generateTitleText() {
     let text = `${PRG.NAME} ${PRG.VERSION
-      }, a game by Lovro Selic, ${"\u00A9"} C00lSch00l ${PRG.YEAR
+      }, a game by Lovro Selic, ${"\u00A9"} LaughingSkull ${PRG.YEAR
       } . Music: 'Shadows In The Fog' written and performed by LaughingSkull, ${"\u00A9"} 2012 Lovro Selic. `;
     text +=
       "     ENGINE, GRID and GAME code by Lovro Selic using JavaScript ES10";
     text = text.split("").join(String.fromCharCode(8202));
     return text;
   },
-  setTitle: function () {
+  setTitle() {
     const text = GAME.generateTitleText();
     const RD = new RenderData("Arcade", 16, "blue", "bottomText");
     const SQ = new Area(0, 0, LAYER.bottomText.canvas.width, LAYER.bottomText.canvas.height); //
     GAME.movingText = new MovingText(text, 3, RD, SQ);
   },
-  runTitle: function () {
+  runTitle() {
     if (ENGINE.GAME.stopAnimation) return;
     GAME.movingText.process();
     ENEMY.move();
     GAME.titleFrameDraw();
   },
-  titleFrameDraw: function () {
+  titleFrameDraw() {
     ENGINE.clearLayerStack();
     GAME.movingText.draw();
     ENEMY.draw();
   },
   sparxTimer: null,
-  startSparx: function () {
+  startSparx() {
     Sparx.initPair(MAP);
     if (GAME.sparxTimer !== null) {
       GAME.sparxTimer.unregister();
@@ -1259,13 +1259,13 @@ const GAME = {
   }
 };
 const TITLE = {
-  main: function () {
+  main() {
     TITLE.title();
     TITLE.bottom();
     TITLE.score();
     TITLE.hiScore();
   },
-  title: function () {
+  title() {
     var CTX = LAYER.title;
     TITLE.background();
     var fs = 42;
@@ -1309,7 +1309,7 @@ const TITLE = {
       y += 3;
     }
   },
-  level: function () {
+  level() {
     const RD = new RenderData("NGage", 18, "#C0C0C0", "text", "#A9A9A9", 1, 1, 3);
     ENGINE.TEXT.RD = RD;
     let y = ENGINE.gameHEIGHT / 4 + 24;
@@ -1317,12 +1317,12 @@ const TITLE = {
     y += 24;
     ENGINE.TEXT.centeredText(`BONUS MULTIPLIER: ${GAME.bonusFactor.toString()}`, ENGINE.gameWIDTH, y);
   },
-  background: function () {
+  background() {
     var CTX = LAYER.title;
     CTX.fillStyle = "#000";
     CTX.roundRect(0, 0, ENGINE.titleWIDTH, ENGINE.titleHEIGHT, { upperLeft: 20, upperRight: 20, lowerLeft: 0, lowerRight: 0 }, true, true);
   },
-  bottom: function () {
+  bottom() {
     var CTX = LAYER.bottom;
     CTX.fillStyle = "#000";
     CTX.roundRect(
@@ -1350,7 +1350,7 @@ const TITLE = {
     CTX.shadowColor = "#cec967";
     CTX.fillText("Version " + PRG.VERSION + " by Lovro Selič", x, y);
   },
-  bottomBlank: function () {
+  bottomBlank() {
     var CTX = LAYER.bottom;
     CTX.fillStyle = "#000";
     CTX.roundRect(
@@ -1368,13 +1368,13 @@ const TITLE = {
       true
     );
   },
-  scoreBlank: function () {
+  scoreBlank() {
     ENGINE.clearLayer("score_back");
     var CTX = LAYER.score_back;
     CTX.fillStyle = "#000";
     CTX.fillRect(0, 0, ENGINE.scoreWIDTH, ENGINE.scoreHEIGHT);
   },
-  score: function () {
+  score() {
     ENGINE.clearLayer("score");
     TITLE.scoreBlank();
     let CTX = LAYER.score;
@@ -1427,7 +1427,7 @@ const TITLE = {
     CTX.stroke();
     CTX.restore();
   },
-  hiScore: function () {
+  hiScore() {
     ENGINE.clearLayer("hiscore");
     let CTX = LAYER.hiscore;
     let fs = 14;
@@ -1457,7 +1457,7 @@ const TITLE = {
     let x = Math.floor((ENGINE.scoreWIDTH - measure.width) / 2);
     CTX.fillText(text, x, y);
   },
-  gameOver: function () {
+  gameOver() {
     ENGINE.clearLayer("text");
     var CTX = LAYER.text;
     CTX.textAlign = "center";
@@ -1487,7 +1487,7 @@ const TITLE = {
     CTX.shadowBlur = 3;
     CTX.fillText("GAME OVER", x, y);
   },
-  pressEnter: function () {
+  pressEnter() {
     const RD = new RenderData(
       "NGage",
       24,
@@ -1502,10 +1502,10 @@ const TITLE = {
     var y = ENGINE.gameHEIGHT / 2 + 48;
     ENGINE.TEXT.centeredText("Press ENTER to continue", y);
   },
-  music: function () {
+  music() {
     if (AUDIO.Title) AUDIO.Title.play();
   },
-  startTitle: function () {
+  startTitle() {
     if (AUDIO.Title) AUDIO.Title.play();
     ENGINE.clearLayer("text");
     ENGINE.clearLayer("actors");
@@ -1568,7 +1568,7 @@ const TITLE = {
     ENGINE.GAME.start(); //INIT game loop
     ENGINE.GAME.ANIMATION.next(GAME.runTitle);
   },
-  drawButtons: function () {
+  drawButtons() {
     ENGINE.clearLayer("button");
     FORM.BUTTON.POOL.clear();
     let x = 32;
@@ -1592,7 +1592,7 @@ const TITLE = {
     $(ENGINE.topCanvas).mousemove(ENGINE.mouseOver);
     $(ENGINE.topCanvas).click(ENGINE.mouseClick);
   },
-  lines: function () {
+  lines() {
     let x = 208;
     let y = 250;
     TITLE.line(x, y);
@@ -1601,7 +1601,7 @@ const TITLE = {
     y = 720;
     TITLE.line(x, y);
   },
-  line: function (x, y) {
+  line(x, y) {
     let CTX = LAYER.animation;
     let size = 2;
     let width = 615;
